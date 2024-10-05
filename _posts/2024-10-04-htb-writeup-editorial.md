@@ -18,7 +18,7 @@ image: editorial.png
 ## Escaneo
 
 ```bash
-nmap -p- --open -sS -min-rate 5000 -vvv -n -Pn -oG allPorts 10.10.11.20
+nmap -p- --open -sS -min-rate 5000 -vvv -n -Pn -oG allPorts 10.10.11.20 -oG allPorts
 ```
 
 Puertos abiertos: 22 y 80
@@ -75,9 +75,11 @@ El usuario tiene acceso por SSH y al conectarse se obtiene la User Flag.
 
 ## Escalada
 
-find / -perm -4000 -user root 2>/dev/null
+Listando los ficheros con permisos de root:
 
 ```bash
+find / -perm -4000 -user root 2>/dev/null
+
 /usr/lib/openssh/ssh-keysign
 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
 /usr/libexec/polkit-agent-helper-1
