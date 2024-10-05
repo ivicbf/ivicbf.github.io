@@ -1,6 +1,6 @@
 ---
 title: PermX - Hack The Box
-date: 2024-10-05
+date: 2024-09-20
 description: Maquina PermX (Easy) de Hack The Box.
 categories:
     - Writeups
@@ -18,7 +18,7 @@ image: permx.png
 ## Escaneo
 
 ```bash
-nmap -p- --open -sS -min-rate 5000 -vvv -n -Pn -oG allPorts 10.10.11.23 -oG allPorts
+nmap -p- --open -sS -min-rate 5000 -vvv -n -Pn 10.10.11.23 -oG allPorts
 ```
 
 Puertos abiertos: 22 y 80
@@ -26,7 +26,7 @@ Puertos abiertos: 22 y 80
 ## Análisis
 
 ```bash
-nmap -sCV -p22,80 -oN targeted 10.10.11.23 -oN targeted
+nmap -sCV -p22,80 10.10.11.23 -oN targeted
 
 22/tcp open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.10 (Ubuntu Linux; protocol 2.0)
 80/tcp open  http    Apache httpd 2.4.52

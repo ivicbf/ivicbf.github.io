@@ -1,6 +1,6 @@
 ---
 title: Utilidades
-date: 2024-10-03
+date: 2024-09-01
 description: Post con recursos generales.
 categories:
     - Utilities

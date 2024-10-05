@@ -1,6 +1,6 @@
 ---
 title: Permisos en Linux
-date: 2024-10-03
+date: 2024-09-01
 description: Información de permisos en ficheros y directorios de Linux.
 categories:
     - Permissions
