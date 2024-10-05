@@ -13,7 +13,12 @@ media_subpath: /assets/img/commons/Utilities/
 ## Tratamiento de la tty
 
 ```bash
+script /dev/null -c bash
 stty raw -echo; fg
+reset xterm
+export TERM=xterm
+export SHELL=/bin/bash
+stty rows 44 col 184
 ```
 
 ## Reverse Shell Linux
