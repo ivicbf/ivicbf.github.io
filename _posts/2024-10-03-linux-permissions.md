@@ -1,7 +1,7 @@
 ---
 title: Permisos en Linux
 date: 2024-10-03
-description: Post con recursos generales.
+description: Información de permisos en ficheros y directorios de Linux.
 categories:
     - Permissions
 tags:
