@@ -1,12 +1,12 @@
 ---
-title: Info
+title: Utilidades
 date: 2024-10-03
 description: Post con recursos generales.
 categories:
-    - Info
+    - Utilities
 tags:
-    - Info
-media_subpath: /assets/img/commons/info/
+    - Utilities
+media_subpath: /assets/img/commons/Utilities/
 # image:
 ---
 

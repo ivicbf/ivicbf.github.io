@@ -1,6 +1,8 @@
 # The Site Configuration
 
 # INFO https://chirpy.cotes.page/
+# Test: bundle exec jekyll s
+# URL Test: http://127.0.0.1:4000
 
 # Import the theme
 theme: jekyll-theme-chirpy
