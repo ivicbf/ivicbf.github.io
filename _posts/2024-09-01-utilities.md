@@ -19,7 +19,7 @@ stty raw -echo; fg
 reset xterm
 export TERM=xterm
 export SHELL=/bin/bash
-stty rows 44 col 184
+stty rows 44 cols 184
 ```
 
 ## Reverse Shell Linux
