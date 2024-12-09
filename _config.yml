@@ -20,7 +20,7 @@ timezone: Europe/Madrid
 
 title: Ivicbf # the main title
 
-tagline: Network Engeneer # it will display as the subtitle
+tagline: MSS Technical Office # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   Personal web.
@@ -42,8 +42,9 @@ social:
   email: ne0_10@hotmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://x.com/ivicbf # change to your Twitter homepage
     - https://github.com/ivicbf # change to your GitHub homepage
+    - https://bsky.app/profile/ivicbf.bsky.social
+    - https://x.com/ivicbf # change to your Twitter homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
