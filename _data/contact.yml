@@ -8,7 +8,7 @@
 
 - type: bluesky
   icon: 'fa-brands fa-bluesky'
-  url: 'https://bsky.app/profile/ivicbf.bsky.social'                   # Fill with your Bluesky profile link
+  url: 'https://bsky.app/profile/ivicbf.bsky.social'   # Fill with your Bluesky profile link
 
 - type: email
   icon: "fas fa-envelope"
@@ -17,6 +17,7 @@
 - type: rss
   icon: "fas fa-rss"
   noblank: true
+
 # Uncomment and complete the url below to enable more contact options
 #
 # - type: mastodon
