@@ -52,3 +52,34 @@ nmap --script http-enum -p80 10.10.11.28 -oN webScan
 | http-enum: 
 |_  /home/: Potentially interesting folder
 ```
+
+Enumerando directorios con wfuzz se ven los siguientes directorios:
+```bash
+wfuzz -c --hc=404 -t 200 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt http://sea.htb/FUZZ
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                        
+=====================================================================
+
+000000182:   301        7 L      20 W       228 Ch      "data"                                                                                         
+000000519:   301        7 L      20 W       231 Ch      "plugins"                                                                                      
+000000955:   301        7 L      20 W       232 Ch      "messages"                                                                                     
+000000124:   200        86 L     262 W      3649 Ch     "0"                                                                                            
+000000127:   301        7 L      20 W       230 Ch      "themes"                                                                                        
+000000038:   200        86 L     262 W      3649 Ch     "home"                                                                                         
+
+```
+
+Directorio /data:
+```bash
+wfuzz -c --hc=403,404 -t 200 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt http://sea.htb/data/FUZZ
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                        
+=====================================================================
+
+000001559:   200        84 L     209 W      3340 Ch     "404"                                                                                          
+000000094:   301        7 L      20 W       234 Ch      "files"                                                                                        
+000000038:   200        86 L     262 W      3649 Ch     "home"    
+```
+
