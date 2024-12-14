@@ -83,3 +83,69 @@ ID           Response   Lines    Word       Chars       Payload
 000000038:   200        86 L     262 W      3649 Ch     "home"    
 ```
 
+Directorio /data/files:
+```bash
+wfuzz -c --hc=403,404 -t 200 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt http://sea.htb/data/files/FUZZ
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                        
+=====================================================================
+
+000000038:   200        86 L     262 W      3649 Ch     "home"                                                                                         
+000001559:   200        84 L     209 W      3340 Ch     "404"   
+```
+
+Directorio /plugins:
+```bash
+wfuzz -c --hc=403,404 -t 200 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt http://sea.htb/plugins/FUZZ
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                        
+=====================================================================
+
+000000038:   200        86 L     262 W      3649 Ch     "home"                                                                                         
+000001559:   200        84 L     209 W      3340 Ch     "404"   
+```
+
+Directorio /messages:
+```bash
+wfuzz -c --hc=403,404 -t 200 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt http://sea.htb/messages/FUZZ
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                        
+=====================================================================
+
+000000038:   200        86 L     262 W      3649 Ch     "home"                                                                                         
+000001559:   200        84 L     209 W      3340 Ch     "404"     
+```
+
+Directorio /themes:
+```bash
+wfuzz -c --hc=403,404 -t 200 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt http://sea.htb/themes/FUZZ
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                        
+=====================================================================
+
+000000038:   200        86 L     262 W      3649 Ch     "home"                                                                                         
+000001559:   200        84 L     209 W      3340 Ch     "404"                                                                                          
+000007875:   301        7 L      20 W       235 Ch      "bike"  
+```
+
+Directorio /themes/bike:
+```bash
+wfuzz -c --hc=403,404 -t 200 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt http://sea.htb/themes/bike/FUZZ
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                        
+=====================================================================
+
+000000252:   200        1 L      1 W        6 Ch        "version"                                                                                      
+000000039:   301        7 L      20 W       239 Ch      "img"                                                                                          
+000000038:   200        86 L     262 W      3649 Ch     "home"                                                                                         
+000000550:   301        7 L      20 W       239 Ch      "css"                                                                                          
+000000965:   200        1 L      9 W        66 Ch       "summary"                                                                                      
+000001559:   200        84 L     209 W      3340 Ch     "404"                                                                                          
+000003295:   200        21 L     168 W      1067 Ch     "LICENSE"   
+```
+
