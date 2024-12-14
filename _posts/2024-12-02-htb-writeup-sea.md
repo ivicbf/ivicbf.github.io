@@ -299,7 +299,7 @@ ssh -v -N -L 8080:localhost:8080 amay@sea.htb
 
 Al atacar el puerto local 8080 se observa que se trata de una web de un sistema de monitorización:
 
-![System Monitor](system_monitor.png)
+<!-- ![System Monitor](system_monitor.png) -->
 
 Capturando con burpsuit la petición de "Analyze" se observa que se pasa el nombre del fichero en "log_file":
 
@@ -331,7 +331,7 @@ log_file=%2Fvar%2Flog%2Fapache2%2Faccess.log&analyze_log=
 
 Se testea pasar otros ficheros como "/etc/passwd" y funciona:
 
-![/etc/passwd](etc_passwd.png)
+<!-- ![/etc/passwd](etc_passwd.png) -->
 
 Se testea a concatenar comandos con "+" en bash y funciona, por lo que se procede a modificar los permisos del usuario "amay" para darle permisos de "sudo":
 
