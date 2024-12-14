@@ -189,3 +189,9 @@ En los parametros del exploit se pasa el puerto donde se dejará a la escucha ne
 Starting HTTP server with Python3, waiting for the XSS request
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ```
+
+El exploit genera una URL que se introducirá en el campo "Website" de la página de [contacto](http://sea.htb/contact.php).
+
+Tras el submit, se obtiene acceso a la maquina con el usuario www-data.
+
+## Escalada
