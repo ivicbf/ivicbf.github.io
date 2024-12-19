@@ -11,8 +11,8 @@ tags:
     - CTF
     - Easy
     - Seasonal
-media_subpath: /assets/img/commons/Sightless/
-image: Sightless.png
+media_subpath: /assets/img/commons/sightless/
+image: sightless.png
 ---
 
 ## Escaneo
